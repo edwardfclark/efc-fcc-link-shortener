@@ -8,15 +8,32 @@ const Link = require('../models/shortlink.js');
 
 // An example get request. It looks up the entry with :id, redirects you to that URL.
 router.get('/shorturl/:id', function(req, res) {
-    res.send({type: "GET", example: "true"})
+
+    // Set val based on the number of documents in the database. This will be used to create the record later.
+
+    let val;
+    Link.estimatedDocumentCount().then(function(number) {
+        console.log("number is "+number);
+        val = number;
+        return val;
+    });
+    // console.log(val);
+    res.send({test: "pass?"});
 });
+
 
 // Add a new link to the database with a POST request.
-router.post("shorturl/new", function(req, res) {
-    var link = new Link();
-    res.send();
-});
+// req.body should send the data in format {url: String, shortened: Number} as required. Maybe I'll need to access the database to get the right Number, as it will need to be inferred.
+router.post("/shorturl/new", function(req, res) {
 
-// Those are the only two types of request I need to handle for this project.
+    // Find out what the number of docs in the database is. Use that to set the shortened property.
+
+    Link.estimatedDocumentCount().then(function(number) {
+        Link.create({url: req.body.url, shortened: number}).then(function(link) {
+            res.send(link);
+        });
+    });
+    
+});
 
 module.exports = router;
