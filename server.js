@@ -5,6 +5,12 @@ const app = express();
 const port = 8080;
 const routes = require('./routes/api.js');
 
+const mongoose = require('mongoose');
+
+// Connect to MongoDB.
+mongoose.connect('mongodb://localhost/efc-fcc-link-shortener');
+mongoose.Promise = global.Promise;
+
 app.use(bodyParser.json());
 
 // Initialize routes.
