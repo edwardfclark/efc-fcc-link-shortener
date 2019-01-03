@@ -31,7 +31,7 @@ router.post("/shorturl/new", function(req, res, next) {
         // First, see if the url already exists in the database. If not, create a new record and res.send that data. If so, res.send the old data.
         if (oldLink == null) {
             // Find out what the number of docs in the database is. Use that to set the shortened property.
-        
+            console.log("Link does not exist. Creating new record.");
             Link.estimatedDocumentCount().then(function(number) {
                 Link.create({url: req.body.url, shortened: number}).then(function(link) {
                     res.send(link);
@@ -39,6 +39,7 @@ router.post("/shorturl/new", function(req, res, next) {
             }).catch(next);
 
         } else {
+            console.log("Link already exists! Sending existing record.");
             res.send(oldLink);
         }
 
