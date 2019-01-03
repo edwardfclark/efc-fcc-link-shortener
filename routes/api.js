@@ -9,16 +9,15 @@ const Link = require('../models/shortlink.js');
 // An example get request. It looks up the entry with :id, redirects you to that URL.
 router.get('/shorturl/:id', function(req, res, next) {
 
-    // Set val based on the number of documents in the database. This will be used to create the record later.
-
-    let val;
-    Link.estimatedDocumentCount().then(function(number) {
-        console.log("number is "+number);
-        val = number;
-        return val;
-    });
-    // console.log(val);
-    res.send({test: "pass?"});
+    Link.findOne({shortened: req.params.id}, function(err, link) {
+        console.log("ID is "+req.params.id);
+        if (link !== null) {
+            res.send({"oldURL": link.url, "newURL": "/api/shorturl/"+link.shortened});
+        } else {
+            res.send({"message": "Link does not exist in database!"});
+        }
+    }).catch(next);
+    
 });
 
 
