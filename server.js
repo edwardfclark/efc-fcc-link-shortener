@@ -16,6 +16,12 @@ app.use(bodyParser.json());
 // Initialize routes.
 app.use("/api", routes);
 
+// Error handling middleware.
+app.use(function(err, req, res, next) {
+    console.log(err);
+    res.status(422).send({error: err.message});
+});
+
 app.get("/", function(req, res) {
     console.log("BENIS", req.body);
     res.json(req.body);
