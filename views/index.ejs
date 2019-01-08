@@ -16,8 +16,14 @@
                     $.ajax({
                         type: 'POST',
                         url: '/api/shorturl/new',
-                        data: {url: submitUrl}
-                    })
+                        data: {url: submitUrl},
+                        success: function(data) {
+                            console.log(data);
+                            $("#response").html("{shortlink: http://<%= host %>:<%= port %>/api/shorturl/"+data.shortened+"}");
+                        }
+                    });
+
+                    return false;
 
                 });
             });
@@ -33,4 +39,5 @@
         <input type="text" id="url">
         <input type="submit" id="submit">
     </form>
+    <pre id="response"></pre>
 </body>

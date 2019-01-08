@@ -30,5 +30,6 @@ app.get("/", function(req, res) {
     res.render("index", {host: req.hostname, port: port});
 });
 
+
 //Listen for requests using app.listen on previously defined port.
 app.listen(port, () => console.log(`The server is listening on port ${port}, brother. We're ready to accept requests.`));

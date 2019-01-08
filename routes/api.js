@@ -38,15 +38,14 @@ router.post("/shorturl/new", function(req, res, next) {
             Link.estimatedDocumentCount().then(function(number) {
                 Link.create({url: req.body.url, shortened: number}).then(function(link) {
                     console.log(link);
-                    res.render("response", {response: link});
+                    res.send(link);
                 }).catch(next);
             }).catch(next);
 
         } else {
             console.log("Link already exists! Sending existing record.");
-            // res.send(oldLink);
             console.log(oldLink);
-            res.render("response", {response: oldLink});
+            res.send(oldLink);
         }
 
     }).catch(next);
