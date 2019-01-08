@@ -6,11 +6,15 @@ const app = express();
 const port = 8080;
 const routes = require('./routes/api.js');
 
+//Set EJS as the view engine.
+app.set("view engine", "ejs");
+
 
 // Connect to MongoDB.
 mongoose.connect('mongodb://localhost/efc-fcc-link-shortener');
 mongoose.Promise = global.Promise;
 
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // Initialize routes.
@@ -23,9 +27,8 @@ app.use(function(err, req, res, next) {
 });
 
 app.get("/", function(req, res) {
-    console.log("BENIS", req.body);
-    res.json(req.body);
-})
+    res.render("index", {host: req.hostname, port: port});
+});
 
 //Listen for requests using app.listen on previously defined port.
 app.listen(port, () => console.log(`The server is listening on port ${port}, brother. We're ready to accept requests.`));

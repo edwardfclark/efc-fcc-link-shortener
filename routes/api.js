@@ -9,10 +9,12 @@ const Link = require('../models/shortlink.js');
 // An example get request. It looks up the entry with :id, redirects you to that URL.
 router.get('/shorturl/:id', function(req, res, next) {
 
+    //Look in the database for the shortened link with the right id from the link parameters.
     Link.findOne({shortened: req.params.id}, function(err, link) {
         console.log("ID is "+req.params.id);
         if (link !== null) {
-            res.send({"oldURL": link.url, "newURL": "/api/shorturl/"+link.shortened});
+            res.redirect(link.url);
+            // res.send({"oldURL": link.url, "newURL": "/api/shorturl/"+link.shortened});
         } else {
             res.send({"message": "Link does not exist in database!"});
         }
@@ -25,6 +27,8 @@ router.get('/shorturl/:id', function(req, res, next) {
 // req.body should send the data in format {url: String, shortened: Number} as required. Maybe I'll need to access the database to get the right Number, as it will need to be inferred.
 router.post("/shorturl/new", function(req, res, next) {
 
+    console.log("req: "+JSON.stringify(req.body));
+
     Link.findOne({url: req.body.url}, function(err, oldLink) {
 
         // First, see if the url already exists in the database. If not, create a new record and res.send that data. If so, res.send the old data.
@@ -33,13 +37,16 @@ router.post("/shorturl/new", function(req, res, next) {
             console.log("Link does not exist. Creating new record.");
             Link.estimatedDocumentCount().then(function(number) {
                 Link.create({url: req.body.url, shortened: number}).then(function(link) {
-                    res.send(link);
+                    console.log(link);
+                    res.render("response", {response: link});
                 }).catch(next);
             }).catch(next);
 
         } else {
             console.log("Link already exists! Sending existing record.");
-            res.send(oldLink);
+            // res.send(oldLink);
+            console.log(oldLink);
+            res.render("response", {response: oldLink});
         }
 
     }).catch(next);

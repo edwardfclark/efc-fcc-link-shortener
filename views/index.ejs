@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+
+    <script>
+            $(document).ready(function() {
+                console.log("jQuery has loaded.");
+                $('form').on('submit', function() {
+
+                    let submitUrl = $('#url').val();
+                    console.log(submitUrl);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/shorturl/new',
+                        data: {url: submitUrl}
+                    })
+
+                });
+            });
+    </script>
+</head>
+<body>
+    <h1>API Project: URL Shortener Microservice</h1>
+    <p>It's easy. All you do is enter the desired URL below and click POST URL. If the link is already in our database, it will return the existing link. Otherwise, it will create a new one.</p>
+    <p>Results will be passed in JSON form.</p>
+    <p>Example usage: <a href="http://<%= host %>:<%= port %>/api/shorturl/1"><%= host %>/api/shorturl/1</a> will send you to freecodecamp.org.</p>
+    <form>
+        <label for="url">URL to be shortened:</label>
+        <input type="text" id="url">
+        <input type="submit" id="submit">
+    </form>
+</body>
